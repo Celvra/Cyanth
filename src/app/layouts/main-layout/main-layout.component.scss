@@ -1,0 +1,171 @@
+/*
+ * Cyanth - a simple angular blog
+ * author: Celvra
+ * licensed under MIT License
+ * https://github.com/Celvra/Cyanth/blob/master/LICENSE
+ */
+
+/* ─── 4-Panel Layout ──────────────────────────────────────── */
+
+:host {
+  display: block;
+  height: 100dvh;
+  width: 100vw;
+  overflow: hidden;
+}
+
+.layout-container {
+  display: flex;
+  height: 100%;
+  width: 100%;
+}
+
+/* ─── Nav Sidebar (left icon rail) ──────────────────────── */
+.nav-sidebar {
+  width: var(--layout-nav-sidebar-width);
+  flex-shrink: 0;
+  background-color: color-mix(in srgb, var(--md-sys-color-surface) 85%, transparent);
+  backdrop-filter: blur(20px);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 12px 0;
+  transition: background-color 0.3s var(--m3-easing-standard);
+}
+
+/* ─── Channel Sidebar ───────────────────────────────────── */
+.channel-sidebar {
+  width: var(--layout-channel-sidebar-width);
+  flex-shrink: 0;
+  background-color: color-mix(in srgb, var(--md-sys-color-surface-container-low) 85%, transparent);
+  backdrop-filter: blur(20px);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  margin-right: 12px;
+  position: relative;
+  transition: background-color 0.3s var(--m3-easing-standard);
+}
+
+/* ─── Main Area (top bar + content) ─────────────────────── */
+.main-area {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background-color: color-mix(in srgb, var(--md-sys-color-surface-container-low) 85%, transparent);
+  position: relative;
+  transition: background-color 0.3s var(--m3-easing-standard);
+}
+
+.main-area::before {
+  content: '';
+  position: absolute;
+  left: -12px;
+  top: 0;
+  bottom: 0;
+  width: 12px;
+  background-color: color-mix(in srgb, var(--md-sys-color-surface-container-low) 85%, transparent);
+  backdrop-filter: blur(20px);
+  z-index: -1;
+  transition: background-color 0.3s var(--m3-easing-standard);
+}
+
+.content-scroll {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 20px;
+  background-color: transparent;
+}
+
+/* ─── Member Sidebar (right) ────────────────────────────── */
+.member-sidebar {
+  width: var(--layout-member-sidebar-width);
+  flex-shrink: 0;
+  background-color: color-mix(in srgb, var(--md-sys-color-surface-container-low) 85%, transparent);
+  backdrop-filter: blur(20px);
+  height: 100%;
+  overflow-y: auto;
+  transition: background-color 0.3s var(--m3-easing-standard);
+}
+
+/* ─── Mobile Overlay ────────────────────────────────────── */
+.sidebar-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 199;
+  background-color: rgba(0, 0, 0, 0.4);
+  animation: m3-fade-in 0.2s var(--m3-easing-standard) both;
+}
+
+/* ─── Mobile Drawers ────────────────────────────────────── */
+.mobile-drawer {
+  display: none;
+}
+
+/* ─── Responsive ────────────────────────────────────────── */
+@media (max-width: 767px) {
+  .nav-sidebar,
+  .channel-sidebar,
+  .member-sidebar {
+    display: none;
+  }
+
+  .mobile-drawer {
+    display: block;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    z-index: 200;
+    width: 300px;
+    max-width: calc(100vw - 56px);
+    background-color: color-mix(in srgb, var(--md-sys-color-surface-container-low) 90%, transparent);
+    backdrop-filter: blur(20px);
+    transform: translateX(-100%);
+    transition: transform 0.3s var(--m3-easing-standard);
+    overflow-y: auto;
+  }
+
+  .mobile-drawer--left {
+    left: 0;
+  }
+
+  .mobile-drawer--right {
+    right: 0;
+    left: auto;
+    transform: translateX(100%);
+  }
+
+  .mobile-drawer.open {
+    transform: translateX(0);
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1279px) {
+  .member-sidebar {
+    display: none;
+  }
+
+  .mobile-drawer--right {
+    display: block;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: auto;
+    z-index: 200;
+    width: var(--layout-member-sidebar-width);
+    background-color: color-mix(in srgb, var(--md-sys-color-surface-container-low) 90%, transparent);
+    backdrop-filter: blur(20px);
+    transform: translateX(100%);
+    transition: transform 0.3s var(--m3-easing-standard);
+    overflow-y: auto;
+  }
+
+  .mobile-drawer--right.open {
+    transform: translateX(0);
+  }
+}

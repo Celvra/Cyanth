@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/wallpaper-api/(.*)",
+      "destination": "https://api.fuchenboke.cn/$1"
+    }
+  ]
+}

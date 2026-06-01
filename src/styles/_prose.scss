@@ -1,0 +1,387 @@
+/*
+ * Cyanth - a simple angular blog
+ * author: Celvra
+ * licensed under MIT License
+ * https://github.com/Celvra/Cyanth/blob/master/LICENSE
+ */
+/* ─── Markdown Prose Styles ──────────────────────────────── */
+/* Uses MD3 color tokens for all content styling              */
+
+.prose {
+  max-width: none;
+  user-select: text;
+  color: var(--md-sys-color-on-surface);
+  font-family: 'Google Sans Flex', 'Noto Sans SC', system-ui, sans-serif;
+}
+
+.prose * {
+  color: inherit;
+}
+
+.prose section {
+  display: block;
+  margin-bottom: 1.5rem;
+}
+
+.prose p {
+  display: block;
+  margin-bottom: 1rem;
+  line-height: 1.75;
+  color: var(--md-sys-color-on-surface);
+}
+
+.prose ul,
+.prose ol {
+  display: block;
+  margin-bottom: 1rem;
+  padding-left: 1.5rem;
+  color: var(--md-sys-color-on-surface);
+}
+.prose ul {
+  list-style-type: disc;
+  list-style-position: outside;
+}
+.prose ol {
+  list-style-type: decimal;
+  list-style-position: outside;
+}
+.prose li {
+  display: list-item;
+  margin-bottom: 0.5rem;
+  color: var(--md-sys-color-on-surface);
+}
+.prose li::marker {
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+/* ─── MD3 Checkboxes (task lists) ────────────────────── */
+.prose li:has(> input[type='checkbox']) {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  list-style: none;
+  margin-left: -1.5rem;
+}
+.prose li:has(> input[type='checkbox'])::marker {
+  display: none;
+}
+
+.prose input[type='checkbox'] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--md-sys-color-on-surface-variant);
+  border-radius: 3px;
+  background: transparent;
+  cursor: pointer;
+  flex-shrink: 0;
+  position: relative;
+  transition: all 0.15s var(--m3-easing-standard);
+}
+.prose input[type='checkbox']:hover {
+  border-color: var(--md-sys-color-on-surface);
+  background-color: color-mix(in srgb, var(--md-sys-color-on-surface) 8%, transparent);
+}
+.prose input[type='checkbox']:checked {
+  background-color: var(--md-sys-color-primary);
+  border-color: var(--md-sys-color-primary);
+}
+.prose input[type='checkbox']:checked::after {
+  content: '';
+  position: absolute;
+  top: 1px;
+  left: 5px;
+  width: 5px;
+  height: 9px;
+  border: solid var(--md-sys-color-on-primary);
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+.prose input[type='checkbox']:checked:hover {
+  background-color: color-mix(in srgb, var(--md-sys-color-primary) 85%, var(--md-sys-color-on-primary));
+}
+.prose input[type='checkbox']:focus-visible {
+  outline: 2px solid var(--md-sys-color-primary);
+  outline-offset: 2px;
+}
+.prose input[type='checkbox']:disabled {
+  border-color: color-mix(in srgb, var(--md-sys-color-on-surface) 30%, transparent);
+  cursor: default;
+}
+.prose input[type='checkbox']:disabled:checked {
+  background-color: color-mix(in srgb, var(--md-sys-color-on-surface) 30%, transparent);
+  border-color: transparent;
+}
+
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4,
+.prose h5,
+.prose h6 {
+  display: block;
+  font-weight: 700;
+  color: var(--md-sys-color-on-surface);
+  position: relative;
+  scroll-margin-top: 5rem;
+  margin-bottom: 1rem;
+  margin-top: 1.5rem;
+}
+
+.prose h1 {
+  font-size: 1.875rem;
+  line-height: 2.25rem;
+}
+.prose h2 {
+  font-size: 1.5rem;
+  line-height: 2rem;
+}
+.prose h3 {
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+}
+.prose h4 {
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+}
+.prose h5 {
+  font-size: 1rem;
+  line-height: 1.5rem;
+}
+.prose h6 {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.prose .anchor {
+  text-decoration: none;
+  margin-left: 0.5rem;
+  opacity: 0;
+  transition: opacity 0.15s var(--m3-easing-standard);
+  color: var(--md-sys-color-primary);
+}
+
+.prose h1:hover .anchor,
+.prose h2:hover .anchor,
+.prose h3:hover .anchor,
+.prose h4:hover .anchor,
+.prose h5:hover .anchor,
+.prose h6:hover .anchor {
+  opacity: 1;
+}
+
+.prose a {
+  color: var(--md-sys-color-primary);
+  text-decoration: none;
+}
+.prose a:hover {
+  text-decoration: underline;
+}
+
+.prose code {
+  padding: 2px 6px;
+  border-radius: var(--md-sys-shape-corner-extra-small);
+  background-color: var(--md-sys-color-surface-container-high);
+  color: var(--md-sys-color-on-surface);
+  font-size: 0.875rem;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+}
+.prose code::before,
+.prose code::after {
+  content: none;
+}
+
+.prose pre {
+  position: relative;
+  padding: 1rem;
+  border-radius: var(--md-sys-shape-corner-large);
+  overflow-x: auto;
+  background-color: var(--md-sys-color-surface-container-low);
+  margin-bottom: 1rem;
+}
+.prose pre code {
+  background: transparent;
+  padding: 0;
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+/* ─── Prism Syntax Highlighting (MD3) ───────────────────── */
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+  color: var(--md-sys-color-outline);
+  font-style: italic;
+}
+.token.punctuation {
+  color: var(--md-sys-color-on-surface-variant);
+}
+.token.property,
+.token.tag,
+.token.boolean,
+.token.number,
+.token.constant,
+.token.symbol {
+  color: var(--md-sys-color-primary);
+}
+.token.selector,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.builtin {
+  color: var(--md-sys-color-tertiary);
+}
+.token.operator,
+.token.entity,
+.token.url {
+  color: var(--md-sys-color-secondary);
+}
+.token.atrule,
+.token.attr-value,
+.token.keyword {
+  color: var(--md-sys-color-primary);
+}
+.token.function,
+.token.class-name {
+  color: var(--md-sys-color-secondary);
+}
+.token.regex,
+.token.important,
+.token.variable {
+  color: var(--md-sys-color-error);
+}
+
+.code-copy-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: var(--md-sys-shape-corner-full);
+  background: transparent;
+  color: var(--md-sys-color-on-surface-variant);
+  cursor: pointer;
+  transition:
+    background-color 0.15s var(--m3-easing-standard),
+    color 0.15s var(--m3-easing-standard);
+  opacity: 0;
+}
+.prose pre:hover .code-copy-btn {
+  opacity: 1;
+}
+.code-copy-btn:hover {
+  background-color: color-mix(in srgb, var(--md-sys-color-on-surface-variant) 12%, transparent);
+}
+.code-copy-btn .material-symbols-outlined {
+  font-size: 18px;
+  transition: transform 0.2s var(--m3-easing-standard);
+}
+.code-copy-btn.copied {
+  color: var(--md-sys-color-primary);
+  opacity: 1;
+}
+.code-copy-btn.copied .material-symbols-outlined {
+  animation: icon-pop 0.3s var(--m3-easing-decelerate);
+}
+
+@keyframes icon-pop {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Remove the default Prismjs copy button provided by plugins */
+div.code-toolbar > .toolbar {
+  display: none !important;
+}
+div.code-toolbar {
+  position: relative;
+}
+
+.prose blockquote {
+  border-left: 4px solid var(--md-sys-color-primary);
+  padding-left: 1rem;
+  font-style: italic;
+  margin-bottom: 1rem;
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.prose img {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--md-sys-shape-corner-large);
+  box-shadow: var(--md-sys-elevation-level1);
+  margin: 1rem 0;
+  background-color: var(--md-sys-color-surface-container);
+  color: var(--md-sys-color-on-surface-variant);
+  cursor: pointer;
+  transition: transform 0.2s var(--m3-easing-standard);
+}
+.prose img:hover {
+  transform: scale(1.01);
+}
+
+.img-fallback {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 120px;
+  background-color: var(--md-sys-color-surface-container-low);
+  border-radius: var(--md-sys-shape-corner-large);
+  margin: 1rem 0;
+  color: var(--md-sys-color-on-surface-variant);
+}
+.img-fallback .material-symbols-outlined {
+  font-size: 40px;
+  opacity: 0.6;
+}
+.img-fallback span:last-child {
+  font-size: 13px;
+  opacity: 0.7;
+}
+
+.prose strong {
+  font-weight: 700;
+  color: var(--md-sys-color-on-surface);
+}
+.prose em {
+  font-style: italic;
+}
+.prose hr {
+  margin: 1.5rem 0;
+  border-color: var(--md-sys-color-outline-variant);
+  border-style: solid;
+  border-width: 1px 0 0 0;
+}
+
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1rem;
+}
+.prose th,
+.prose td {
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--md-sys-color-outline-variant);
+}
+.prose th {
+  font-weight: 700;
+  background-color: var(--md-sys-color-surface-container);
+  color: var(--md-sys-color-on-surface);
+}

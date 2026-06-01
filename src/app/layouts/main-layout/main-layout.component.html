@@ -1,0 +1,49 @@
+<!--
+  Cyanth - a simple angular blog
+  author: Celvra
+  licensed under MIT License
+  https://github.com/Celvra/Cyanth/blob/master/LICENSE
+-->
+<!-- 4-Panel Layout: Nav Sidebar | Channel Sidebar | Content | Member Sidebar -->
+<div class="layout-container">
+  <!-- Mobile Overlay -->
+  @if (mobileMenuOpen) {
+    <div class="sidebar-overlay" (click)="closeMobileMenu()"></div>
+  }
+  @if (memberMenuOpen) {
+    <div class="sidebar-overlay" (click)="closeMemberMenu()"></div>
+  }
+
+  <!-- Mobile Left Drawer -->
+  <div class="mobile-drawer mobile-drawer--left" [class.open]="mobileMenuOpen">
+    <app-channel-sidebar (navigate)="closeMobileMenu()" />
+  </div>
+
+  <!-- Mobile Right Drawer -->
+  <div class="mobile-drawer mobile-drawer--right" [class.open]="memberMenuOpen">
+    <app-member-sidebar />
+  </div>
+
+  <!-- Nav Sidebar (desktop only) -->
+  <nav class="nav-sidebar">
+    <app-nav-sidebar />
+  </nav>
+
+  <!-- Channel Sidebar (desktop only) -->
+  <aside class="channel-sidebar">
+    <app-channel-sidebar />
+  </aside>
+
+  <!-- Main Content Area -->
+  <div class="main-area">
+    <app-top-bar (menuClick)="toggleMobileMenu()" (memberClick)="toggleMemberMenu()" />
+    <main class="content-scroll" id="main-scroll-container">
+      <router-outlet />
+    </main>
+  </div>
+
+  <!-- Member Sidebar (desktop only) -->
+  <aside class="member-sidebar">
+    <app-member-sidebar />
+  </aside>
+</div>

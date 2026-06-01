@@ -1,0 +1,25 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 10
+    labels:
+      - dependencies
+    groups:
+      angular:
+        patterns:
+          - "@angular*"
+          - "@analogjs*"
+      eslint:
+        patterns:
+          - "eslint*"
+          - "@typescript-eslint*"
+          - "@angular-eslint*"
+          - "prettier*"
+      dev-tools:
+        patterns:
+          - "vite*"
+          - "vitest*"
+          - "typescript"

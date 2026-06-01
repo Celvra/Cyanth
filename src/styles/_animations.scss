@@ -1,0 +1,131 @@
+/*
+ * Cyanth - a simple angular blog
+ * author: Celvra
+ * licensed under MIT License
+ * https://github.com/Celvra/Cyanth/blob/master/LICENSE
+ */
+/* ─── MD3 Keyframe Animations ────────────────────────────── */
+
+@keyframes m3-enter {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes m3-scale-enter {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes m3-exit {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+}
+
+@keyframes m3-slide-down {
+  from {
+    opacity: 0;
+    transform: translateY(-16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes m3-slide-in-left {
+  from {
+    opacity: 0;
+    transform: translateX(-80px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes m3-slide-in-right {
+  from {
+    opacity: 0;
+    transform: translateX(80px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes m3-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes breathing {
+  0% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--md-sys-color-tertiary) 40%, transparent);
+  }
+  70% {
+    box-shadow: 0 0 0 6px color-mix(in srgb, var(--md-sys-color-tertiary) 0%, transparent);
+  }
+  100% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--md-sys-color-tertiary) 0%, transparent);
+  }
+}
+
+/* ─── Smooth Theme Transitions ──────────────────────────── */
+*,
+*::before,
+*::after {
+  transition:
+    background-color 0.2s var(--m3-easing-standard),
+    color 0.2s var(--m3-easing-standard),
+    border-color 0.2s var(--m3-easing-standard),
+    box-shadow 0.2s var(--m3-easing-standard),
+    outline-color 0.2s var(--m3-easing-standard),
+    fill 0.2s var(--m3-easing-standard),
+    stroke 0.2s var(--m3-easing-standard);
+}
+
+/* ─── Reduced Motion ────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
+/* ─── Content Enter Animation ────────────────────────────── */
+@media (prefers-reduced-motion: no-preference) {
+  .content-animate-enter {
+    animation: m3-enter 0.3s var(--m3-easing-decelerate) both;
+  }
+}

@@ -1,0 +1,555 @@
+/*
+ * Cyanth - a simple angular blog
+ * author: Celvra
+ * licensed under MIT License
+ * https://github.com/Celvra/Cyanth/blob/master/LICENSE
+ */
+@use 'tokens';
+@use 'animations';
+@use 'prose';
+
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200');
+@import url('https://fonts.googleapis.com/css2?family=Google+Sans+Flex:wght@300..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap');
+
+/* ─── Base Styles ────────────────────────────────────────── */
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  transition:
+    color 0.8s var(--m3-easing-standard),
+    background-color 0.8s var(--m3-easing-standard);
+}
+
+body {
+  font-family: 'Google Sans Flex', 'Noto Sans SC', system-ui, sans-serif;
+  background-color: transparent;
+  color: var(--md-sys-color-on-surface, #e6e1e5);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  margin: 0;
+  padding: 0;
+  transition: color 0.8s var(--m3-easing-standard);
+}
+
+a,
+button,
+input,
+textarea,
+select {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ─── Disable text selection globally ───────────────────── */
+* {
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* ─── Allow selection in content areas ──────────────────── */
+.prose,
+.prose *,
+#comment-section,
+#comment-section * {
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+/* ─── Selection highlight color ─────────────────────────── */
+::selection {
+  background-color: color-mix(in srgb, var(--md-sys-color-primary) 35%, transparent);
+  color: var(--md-sys-color-on-surface);
+  border-radius: 4px;
+}
+
+@keyframes select-pop {
+  from {
+    background-color: color-mix(in srgb, var(--md-sys-color-primary) 50%, transparent);
+  }
+  to {
+    background-color: color-mix(in srgb, var(--md-sys-color-primary) 35%, transparent);
+  }
+}
+
+.prose ::selection,
+.prose *::selection,
+#comment-section ::selection,
+#comment-section *::selection {
+  animation: select-pop 0.3s ease-out;
+}
+
+/* ─── Twikoo MD3 Overrides ──────────────────────────── */
+#tcomment,
+#tcomment * {
+  -webkit-user-select: text !important;
+  user-select: text !important;
+}
+
+#tcomment {
+  font-family: 'Google Sans Flex', 'Noto Sans SC', system-ui, sans-serif !important;
+  color: var(--md-sys-color-on-surface) !important;
+}
+
+/* ── Comments count ──────────────────────────────────── */
+.tk-comments-count {
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  color: var(--md-sys-color-on-surface) !important;
+  margin-bottom: 16px !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+
+/* ── Reply indicator ─────────────────────────────────── */
+.tk-reply-cancel {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+  font-size: 13px !important;
+  color: var(--md-sys-color-on-surface-variant) !important;
+  cursor: pointer !important;
+  padding: 4px 12px !important;
+  border-radius: var(--md-sys-shape-corner-full) !important;
+  background: var(--md-sys-color-surface-container-low) !important;
+  border: none !important;
+  font-family: inherit !important;
+  margin-bottom: 8px !important;
+  transition:
+    background-color 0.15s,
+    transform 0.1s !important;
+  -webkit-user-select: none !important;
+  user-select: none !important;
+}
+.tk-reply-cancel:hover {
+  background: var(--md-sys-color-surface-container) !important;
+}
+.tk-reply-cancel:active {
+  transform: scale(0.96) !important;
+}
+
+/* ── Inputs ──────────────────────────────────────────── */
+.tk-input .el-input__wrapper,
+.tk-textarea .el-textarea__inner,
+.tk-input .el-input__inner,
+.tk-input input,
+.tk-textarea textarea {
+  background-color: var(--md-sys-color-surface-container-low) !important;
+  border: 1px solid var(--md-sys-color-outline-variant) !important;
+  border-radius: var(--md-sys-shape-corner-small) !important;
+  color: var(--md-sys-color-on-surface) !important;
+  font-family: inherit !important;
+  font-size: 14px !important;
+  transition: border-color 0.2s !important;
+  box-shadow: none !important;
+}
+.tk-input .el-input__inner,
+.tk-textarea .el-textarea__inner {
+  padding: 10px 14px !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+.tk-input .el-input__wrapper:focus-within,
+.tk-textarea .el-textarea__inner:focus,
+.tk-input .el-input__inner:focus,
+.tk-input input:focus,
+.tk-textarea textarea:focus {
+  border-color: var(--md-sys-color-primary) !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+.tk-input .el-input__inner::placeholder,
+.tk-textarea .el-textarea__inner::placeholder,
+.tk-input input::placeholder,
+.tk-textarea textarea::placeholder {
+  color: var(--md-sys-color-on-surface-variant) !important;
+}
+.tk-textarea .el-textarea__inner,
+.tk-textarea textarea {
+  resize: vertical !important;
+  min-height: 80px !important;
+}
+.tk-input {
+  margin-bottom: 8px !important;
+}
+/* Remove Element Plus hover/focus default shadows */
+.tk-input .el-input__wrapper:hover,
+.tk-input .el-input__wrapper.is-focus {
+  box-shadow: none !important;
+}
+.tk-input .el-input {
+  --el-input-hover-border-color: var(--md-sys-color-outline-variant) !important;
+  --el-input-focus-border-color: var(--md-sys-color-primary) !important;
+}
+
+/* ── Buttons ─────────────────────────────────────────── */
+.tk-submit .el-button--primary,
+.tk-submit button[type='submit'] {
+  background-color: var(--md-sys-color-primary) !important;
+  color: var(--md-sys-color-on-primary) !important;
+  border: none !important;
+  border-radius: var(--md-sys-shape-corner-full) !important;
+  padding: 10px 24px !important;
+  font-weight: 500 !important;
+  font-family: inherit !important;
+  font-size: 14px !important;
+  cursor: pointer !important;
+  transition:
+    opacity 0.15s,
+    transform 0.1s !important;
+  -webkit-user-select: none !important;
+  user-select: none !important;
+}
+.tk-submit .el-button--primary:hover,
+.tk-submit button[type='submit']:hover {
+  opacity: 0.9 !important;
+}
+.tk-submit .el-button--primary:active,
+.tk-submit button[type='submit']:active {
+  transform: scale(0.96) !important;
+}
+.tk-submit .el-button--default,
+.tk-cancel {
+  background: none !important;
+  border: 1px solid var(--md-sys-color-outline) !important;
+  color: var(--md-sys-color-on-surface-variant) !important;
+  border-radius: var(--md-sys-shape-corner-full) !important;
+  font-family: inherit !important;
+  font-size: 14px !important;
+  -webkit-user-select: none !important;
+  user-select: none !important;
+  transition:
+    background-color 0.15s,
+    transform 0.1s !important;
+}
+.tk-submit .el-button--default:active,
+.tk-cancel:active {
+  transform: scale(0.96) !important;
+}
+
+/* ── Comment items ───────────────────────────────────── */
+.tk-comment {
+  border-bottom: 1px solid var(--md-sys-color-outline-variant) !important;
+  padding: 16px 0 !important;
+  margin: 0 !important;
+  transition: background-color 0.15s !important;
+}
+.tk-comment:last-child {
+  border-bottom: none !important;
+}
+.tk-comment .tk-master-badge {
+  font-size: 11px !important;
+  padding: 1px 6px !important;
+  border-radius: var(--md-sys-shape-corner-small) !important;
+  background: var(--md-sys-color-primary-container) !important;
+  color: var(--md-sys-color-on-primary-container) !important;
+  font-weight: 500 !important;
+}
+
+/* ── Avatar ──────────────────────────────────────────── */
+.tk-avatar-img {
+  border-radius: var(--md-sys-shape-corner-full) !important;
+  width: 40px !important;
+  height: 40px !important;
+  object-fit: cover !important;
+}
+
+/* ── Nick ────────────────────────────────────────────── */
+.tk-nick {
+  font-weight: 600 !important;
+  color: var(--md-sys-color-on-surface) !important;
+  font-size: 14px !important;
+}
+.tk-nick a {
+  color: var(--md-sys-color-on-surface) !important;
+  text-decoration: none !important;
+}
+.tk-nick a:hover {
+  text-decoration: underline !important;
+}
+
+/* ── Meta (time, like count) ─────────────────────────── */
+.tk-meta {
+  font-size: 12px !important;
+  color: var(--md-sys-color-on-surface-variant) !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+.tk-meta a {
+  color: var(--md-sys-color-on-surface-variant) !important;
+  text-decoration: none !important;
+}
+
+/* ── Content ─────────────────────────────────────────── */
+.tk-content {
+  color: var(--md-sys-color-on-surface) !important;
+  font-size: 14px !important;
+  line-height: 1.7 !important;
+  margin-top: 8px !important;
+  font-family: inherit !important;
+}
+.tk-content a {
+  color: var(--md-sys-color-primary) !important;
+  text-decoration: none !important;
+}
+.tk-content a:hover {
+  text-decoration: underline !important;
+}
+.tk-content img {
+  max-width: 100% !important;
+  border-radius: var(--md-sys-shape-corner-medium) !important;
+  margin: 8px 0 !important;
+  cursor: pointer !important;
+  transition: transform 0.2s !important;
+}
+.tk-content img:hover {
+  transform: scale(1.02) !important;
+}
+.tk-content blockquote {
+  border-left: 3px solid var(--md-sys-color-primary) !important;
+  padding-left: 14px !important;
+  margin: 10px 0 !important;
+  color: var(--md-sys-color-on-surface-variant) !important;
+  font-style: italic !important;
+}
+.tk-content code {
+  background: var(--md-sys-color-surface-container-highest) !important;
+  padding: 2px 7px !important;
+  border-radius: 4px !important;
+  font-size: 13px !important;
+  font-family: 'JetBrains Mono', monospace !important;
+}
+.tk-content pre {
+  background: var(--md-sys-color-surface-container-highest) !important;
+  padding: 14px !important;
+  border-radius: var(--md-sys-shape-corner-medium) !important;
+  overflow-x: auto !important;
+  margin: 10px 0 !important;
+}
+.tk-content pre code {
+  background: none !important;
+  padding: 0 !important;
+}
+.tk-content hr {
+  border: none !important;
+  border-top: 1px solid var(--md-sys-color-outline-variant) !important;
+  margin: 16px 0 !important;
+}
+.tk-content table {
+  width: 100% !important;
+  border-collapse: collapse !important;
+  margin: 10px 0 !important;
+}
+.tk-content th,
+.tk-content td {
+  border: 1px solid var(--md-sys-color-outline-variant) !important;
+  padding: 8px 12px !important;
+  font-size: 13px !important;
+}
+.tk-content th {
+  background: var(--md-sys-color-surface-container-low) !important;
+  font-weight: 600 !important;
+}
+
+/* ── Actions (reply, like) ───────────────────────────── */
+.tk-action {
+  color: var(--md-sys-color-on-surface-variant) !important;
+  font-size: 12px !important;
+  cursor: pointer !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+  padding: 4px 8px !important;
+  border-radius: var(--md-sys-shape-corner-full) !important;
+  transition:
+    background-color 0.15s,
+    color 0.15s,
+    transform 0.1s !important;
+  border: none !important;
+  background: none !important;
+  font-family: inherit !important;
+  -webkit-user-select: none !important;
+  user-select: none !important;
+}
+.tk-action:hover {
+  color: var(--md-sys-color-primary) !important;
+  background: color-mix(in srgb, var(--md-sys-color-on-surface-variant) 8%, transparent) !important;
+}
+.tk-action:active {
+  transform: scale(0.92) !important;
+}
+.tk-like,
+.tk-reply {
+  color: var(--md-sys-color-on-surface-variant) !important;
+}
+.tk-like:hover,
+.tk-reply:hover {
+  color: var(--md-sys-color-primary) !important;
+}
+.tk-like.active,
+.tk-liked {
+  color: var(--md-sys-color-error) !important;
+}
+.tk-like.active svg,
+.tk-liked svg {
+  fill: var(--md-sys-color-error) !important;
+}
+
+/* ── Loading ─────────────────────────────────────────── */
+.tk-loading {
+  color: var(--md-sys-color-primary) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  padding: 32px 0 !important;
+}
+
+/* ── Nested replies ──────────────────────────────────── */
+.tk-comment .tk-comment {
+  margin-left: 20px !important;
+  border-left: 2px solid var(--md-sys-color-outline-variant) !important;
+  padding-left: 14px !important;
+  border-bottom: none !important;
+}
+
+/* ── Admin panel ─────────────────────────────────────── */
+.tk-admin-container {
+  font-family: 'Google Sans Flex', 'Noto Sans SC', system-ui, sans-serif !important;
+}
+.tk-admin-container .el-input__inner,
+.tk-admin-container .el-textarea__inner {
+  background: var(--md-sys-color-surface-container-low) !important;
+  border: 1px solid var(--md-sys-color-outline-variant) !important;
+  border-radius: var(--md-sys-shape-corner-small) !important;
+  color: var(--md-sys-color-on-surface) !important;
+}
+.tk-admin-container .el-button--primary {
+  background-color: var(--md-sys-color-primary) !important;
+  color: var(--md-sys-color-on-primary) !important;
+  border: none !important;
+  border-radius: var(--md-sys-shape-corner-full) !important;
+}
+
+/* ── Image lightbox overlay ──────────────────────────── */
+.tk-image-container {
+  border-radius: var(--md-sys-shape-corner-medium) !important;
+  overflow: hidden !important;
+}
+.tk-image {
+  border-radius: var(--md-sys-shape-corner-medium) !important;
+}
+
+/* ─── Scrollbar ──────────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--md-sys-color-outline-variant, #49454f);
+  border-radius: var(--md-sys-shape-corner-full);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--md-sys-color-outline, #938f99);
+}
+
+/* ─── Material Symbols Helper ────────────────────────────── */
+.material-symbols-outlined {
+  font-family: 'Material Symbols Outlined';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-feature-settings: 'liga';
+  font-feature-settings: 'liga';
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ─── Loading Spinner ────────────────────────────────────── */
+.wallpaper-loading {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--md-sys-color-surface, #1c1b1f);
+  transition: opacity 0.5s var(--m3-easing-standard);
+}
+
+.wallpaper-loading.fade-out {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.wallpaper-loading.hidden {
+  display: none;
+}
+
+.wallpaper-loading svg {
+  animation: spin 1.4s linear infinite;
+}
+
+/* ─── KaTeX ──────────────────────────────────────────────── */
+@import 'katex/dist/katex.min.css';
+
+/* ─── Semi-transparent controls for wallpaper ───────────── */
+.post-article,
+.copyright-section,
+.toc-sidebar,
+.comment-container,
+.music-player,
+.card {
+  background-color: color-mix(in srgb, var(--md-sys-color-surface) 85%, transparent) !important;
+}
+
+.nav-card,
+.chip {
+  background-color: color-mix(in srgb, var(--md-sys-color-surface-container-low) 80%, transparent) !important;
+}
+
+/* ─── Language Menu (rendered on body) ─────────────────── */
+.lang-menu {
+  position: fixed;
+  z-index: 99999;
+}
+.lang-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  height: 36px;
+  padding: 0 12px;
+  border: none;
+  background: transparent;
+  color: var(--md-sys-color-on-surface);
+  cursor: pointer;
+  font-size: 13px;
+  font-family: inherit;
+  border-radius: var(--md-sys-shape-corner-extra-small);
+  text-align: left;
+}
+.lang-item:hover {
+  background-color: color-mix(in srgb, var(--md-sys-color-on-surface) 8%, transparent);
+}
+.lang-item.active {
+  background-color: var(--md-sys-color-secondary-container);
+  color: var(--md-sys-color-on-secondary-container);
+}
+.lang-flag {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--md-sys-color-primary);
+  min-width: 20px;
+}
