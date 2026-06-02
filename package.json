@@ -1,6 +1,6 @@
 {
   "name": "object2-blog",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "type": "module",
   "description": "A Material Design 3 blog built with Angular + AnalogJS",
   "engines": {
