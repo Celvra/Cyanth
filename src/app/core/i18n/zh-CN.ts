@@ -57,9 +57,10 @@ export const zhCN: Record<string, string> = {
   'category.empty': '该分类下暂无文章。',
 
   // 404
-  'notfound.title': '404',
-  'notfound.message': '你好像迷路了。',
+  'notfound.title': '页面不存在',
+  'notfound.message': '你好像迷路了。请检查链接是否正确，或返回首页继续浏览。',
   'notfound.back': '返回首页',
+  'notfound.goback': '返回上页',
 
   // Context menu
   'ctx.back': '后退',

@@ -7,7 +7,7 @@
 
 import { defineConfig } from 'vite';
 import analog from '@analogjs/platform';
-import { readFileSync, readdirSync } from 'fs';
+import { readFileSync, readdirSync, writeFileSync, mkdirSync } from 'fs';
 import { join } from 'path';
 import matter from 'gray-matter';
 
@@ -94,6 +94,13 @@ export default defineConfig(({ mode }) => ({
             next();
           }
         });
+      },
+      closeBundle() {
+        const outDir = join(process.cwd(), 'dist', 'analog', 'public');
+        try {
+          mkdirSync(outDir, { recursive: true });
+        } catch {}
+        writeFileSync(join(outDir, 'feed.xml'), generateFeedXml());
       },
     },
     analog({

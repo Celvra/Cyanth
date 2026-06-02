@@ -29,6 +29,7 @@
       "@/*": ["src/*"]
     }
   },
+  "exclude": ["functions", "dist", "node_modules"],
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
     "strictInjectionParameters": true,

@@ -118,6 +118,10 @@ export class ContextMenuComponent {
       return;
     }
 
+    if ('ontouchstart' in window && !('pointerType' in event)) {
+      return;
+    }
+
     event.preventDefault();
 
     const selectedText = window.getSelection()?.toString() ?? '';

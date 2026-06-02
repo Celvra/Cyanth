@@ -57,9 +57,10 @@ export const enUS: Record<string, string> = {
   'category.empty': 'No posts in this category.',
 
   // 404
-  'notfound.title': '404',
-  'notfound.message': 'You seem lost.',
+  'notfound.title': 'Page Not Found',
+  'notfound.message': 'The page you are looking for does not exist. Check the URL or return home.',
   'notfound.back': 'Return to Home',
+  'notfound.goback': 'Go Back',
 
   // Context menu
   'ctx.back': 'Back',

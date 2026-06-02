@@ -120,7 +120,7 @@ export default class TagComponent implements OnInit {
 
   ngOnInit(): void {
     const segments = window.location.pathname.split('/').filter(Boolean);
-    this.tagName = segments[segments.length - 1] ?? '';
+    this.tagName = decodeURIComponent(segments[segments.length - 1] ?? '');
 
     this.posts = this.contentFiles
       .map(f => ({

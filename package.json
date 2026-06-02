@@ -10,13 +10,14 @@
     "ng": "ng",
     "dev": "ng serve",
     "start": "npm run dev",
-    "build": "ng build",
+    "build": "ng build && node scripts/generate-feed.cjs",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write \"src/**/*.{ts,html,scss,css,json}\"",
-    "format:check": "prettier --check \"src/**/*.{ts,html,scss,css,json}\""
+    "format:check": "prettier --check \"src/**/*.{ts,html,scss,css,json}\"",
+    "deploy": "pnpm build && cp -r functions dist/analog/public && wrangler pages deploy dist/analog/public --project-name cyanth --branch main"
   },
   "private": true,
   "dependencies": {

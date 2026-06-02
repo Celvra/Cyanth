@@ -17,6 +17,7 @@
 html {
   scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
   transition:
     color 0.8s var(--m3-easing-standard),
     background-color 0.8s var(--m3-easing-standard);

@@ -345,15 +345,14 @@ import { filter } from 'rxjs';
     .mobile-music-container {
       border-radius: var(--md-sys-shape-corner-large);
       overflow: hidden;
-      max-height: 800px;
+      flex-shrink: 0;
       opacity: 1;
-      transition:
-        max-height 2s var(--m3-easing-standard),
-        opacity 1s var(--m3-easing-standard);
+      transition: opacity 0.3s var(--m3-easing-standard);
     }
     .mobile-music-container.hidden-on-post {
       max-height: 0;
       opacity: 0;
+      overflow: hidden;
       transition:
         max-height 0.3s var(--m3-easing-standard),
         opacity 0.2s var(--m3-easing-standard);
@@ -410,16 +409,18 @@ export class MemberSidebarComponent implements OnInit, OnDestroy {
     }
     const top = el.getBoundingClientRect().top - c.getBoundingClientRect().top + c.scrollTop - 80;
     c.scrollTo({ top, behavior: 'smooth' });
+    history.replaceState(null, '', `#${slug}`);
   }
 
   scrollToComments(): void {
-    const el = document.getElementById('comments');
+    const el = document.getElementById('comment-section');
     const c = document.getElementById('main-scroll-container');
     if (!el || !c) {
       return;
     }
     const top = el.getBoundingClientRect().top - c.getBoundingClientRect().top + c.scrollTop - 80;
     c.scrollTo({ top, behavior: 'smooth' });
+    history.replaceState(null, '', '#comments');
   }
 
   scrollToTop(): void {

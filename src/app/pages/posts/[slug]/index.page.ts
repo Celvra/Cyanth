@@ -954,6 +954,7 @@ export default class PostComponent implements OnInit, OnDestroy {
     if (this.toc.activeHeading() !== newActive) {
       this.toc.activeHeading.set(newActive);
       this.scrollTocToActive();
+      history.replaceState(null, '', `#${newActive}`);
     }
 
     const lastH = h[h.length - 1];
