@@ -3,11 +3,13 @@
 // licensed under MIT License
 // https://github.com/Celvra/Cyanth/blob/master/LICENSE
 //
-import { ChangeDetectionStrategy, Component, Output, EventEmitter, signal, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Output, EventEmitter, signal, inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { blogConfig } from '../../../core/config';
 import { I18nService } from '../../../core/services/i18n.service';
+import { SearchService } from '../../../core/services/search.service';
 import { TranslatePipe } from '../../../shared/pipes/translate.pipe';
 
 @Component({
@@ -39,12 +41,12 @@ import { TranslatePipe } from '../../../shared/pipes/translate.pipe';
           class="search-input"
           [placeholder]="'topbar.search' | t"
           [value]="searchQuery()"
-          (input)="searchQuery.set($any($event.target).value)"
+          (input)="onSearchInput($event)"
           (focus)="searchFocused.set(true)"
           (blur)="searchFocused.set(false)"
         />
         @if (searchQuery()) {
-          <button class="search-clear" (click)="searchQuery.set('')" [attr.aria-label]="'topbar.clear_search' | t">
+          <button class="search-clear" (click)="clearSearch()" [attr.aria-label]="'topbar.clear_search' | t">
             <span class="material-symbols-outlined">close</span>
           </button>
         }
@@ -87,12 +89,25 @@ import { TranslatePipe } from '../../../shared/pipes/translate.pipe';
           </div>
           <h3 class="dialog-title">RSS</h3>
           <p class="dialog-desc">{{ 'topbar.rss_desc' | t }}</p>
+          <div class="dialog-links">
+            <div class="dialog-link-row">
+              <span class="material-symbols-outlined link-icon">rss_feed</span>
+              <a class="dialog-link" [href]="siteOrigin + '/feed.xml'" target="_blank" rel="noopener">feed.xml</a>
+              <button class="link-copy" (click)="copyLink(siteOrigin + '/feed.xml')">
+                <span class="material-symbols-outlined">content_copy</span>
+              </button>
+            </div>
+            <div class="dialog-link-row">
+              <span class="material-symbols-outlined link-icon">sitemap</span>
+              <a class="dialog-link" [href]="siteOrigin + '/sitemap.xml'" target="_blank" rel="noopener">sitemap.xml</a>
+              <button class="link-copy" (click)="copyLink(siteOrigin + '/sitemap.xml')">
+                <span class="material-symbols-outlined">content_copy</span>
+              </button>
+            </div>
+          </div>
           <div class="dialog-actions">
-            <button class="dialog-btn dialog-btn-cancel" (click)="closeRssDialog()">
+            <button class="dialog-btn dialog-btn-confirm" (click)="closeRssDialog()">
               {{ 'topbar.cancel' | t }}
-            </button>
-            <button class="dialog-btn dialog-btn-confirm" (click)="copyRssLink()">
-              {{ 'topbar.copy_link' | t }}
             </button>
           </div>
         </div>
@@ -314,8 +329,59 @@ import { TranslatePipe } from '../../../shared/pipes/translate.pipe';
     .dialog-desc {
       font-size: 14px;
       color: var(--md-sys-color-on-surface-variant);
-      margin: 0 0 24px;
+      margin: 0 0 16px;
       line-height: 1.5;
+    }
+    .dialog-links {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+    .dialog-link-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: var(--md-sys-shape-corner-medium);
+      background-color: var(--md-sys-color-surface-container);
+    }
+    .link-icon {
+      font-size: 18px;
+      color: var(--md-sys-color-on-surface-variant);
+      flex-shrink: 0;
+    }
+    .dialog-link {
+      flex: 1;
+      font-size: 13px;
+      color: var(--md-sys-color-primary);
+      text-decoration: none;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .dialog-link:hover {
+      text-decoration: underline;
+    }
+    .link-copy {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border: none;
+      border-radius: var(--md-sys-shape-corner-full);
+      background: transparent;
+      color: var(--md-sys-color-on-surface-variant);
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: background-color 0.15s var(--m3-easing-standard);
+    }
+    .link-copy:hover {
+      background-color: color-mix(in srgb, var(--md-sys-color-on-surface-variant) 8%, transparent);
+    }
+    .link-copy .material-symbols-outlined {
+      font-size: 18px;
     }
     .dialog-actions {
       display: flex;
@@ -333,13 +399,6 @@ import { TranslatePipe } from '../../../shared/pipes/translate.pipe';
       cursor: pointer;
       transition: background-color 0.15s var(--m3-easing-standard);
     }
-    .dialog-btn-cancel {
-      background: transparent;
-      color: var(--md-sys-color-primary);
-    }
-    .dialog-btn-cancel:hover {
-      background-color: color-mix(in srgb, var(--md-sys-color-primary) 8%, transparent);
-    }
     .dialog-btn-confirm {
       background-color: var(--md-sys-color-primary);
       color: var(--md-sys-color-on-primary);
@@ -355,6 +414,12 @@ export class TopBarComponent {
 
   config = blogConfig;
   i18n = inject(I18nService);
+  private isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
+
+  get siteOrigin(): string {
+    return this.isBrowser ? window.location.origin : this.config.site.siteURL;
+  }
+  private searchService = inject(SearchService);
   searchQuery = signal('');
   searchFocused = signal(false);
   rssDialogOpen = signal(false);
@@ -370,10 +435,18 @@ export class TopBarComponent {
     }, 200);
   }
 
-  copyRssLink(): void {
-    const rssUrl = this.config.site.siteURL + '/feed.xml';
-    void navigator.clipboard.writeText(rssUrl).then(() => {
-      this.closeRssDialog();
-    });
+  onSearchInput(event: Event): void {
+    const value = (event.target as HTMLInputElement).value;
+    this.searchQuery.set(value);
+    this.searchService.setQuery(value);
+  }
+
+  clearSearch(): void {
+    this.searchQuery.set('');
+    this.searchService.setQuery('');
+  }
+
+  copyLink(url: string): void {
+    void navigator.clipboard.writeText(url);
   }
 }

@@ -8,10 +8,23 @@
 @use 'animations';
 @use 'prose';
 
-@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200');
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=block');
 @import url('https://fonts.googleapis.com/css2?family=Google+Sans+Flex:wght@300..700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap');
+
+/* ─── Material Symbols — prevent layout shift ───────────── */
+.material-symbols-outlined {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  line-height: 1;
+  vertical-align: middle;
+  text-align: center;
+  overflow: hidden;
+  font-size: 24px;
+  flex-shrink: 0;
+}
 
 /* ─── Base Styles ────────────────────────────────────────── */
 html {
@@ -500,6 +513,86 @@ select {
 
 .wallpaper-loading svg {
   animation: spin 1.4s linear infinite;
+}
+
+/* ─── Image Placeholder — M3 Circular Progress ─────────── */
+.img-placeholder {
+  position: relative;
+  overflow: hidden;
+  background-color: var(--md-sys-color-surface-container);
+}
+
+/* Angular template images: use mat-spinner inside .img-spinner-wrap */
+.img-spinner-wrap {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  transition: opacity 0.3s var(--m3-easing-standard);
+}
+
+.img-placeholder.loaded .img-spinner-wrap,
+.img-placeholder.error .img-spinner-wrap {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.img-placeholder > img {
+  opacity: 0;
+  transition: opacity 0.3s var(--m3-easing-standard);
+}
+
+.img-placeholder.loaded > img {
+  opacity: 1;
+}
+
+.img-placeholder.error > img {
+  display: none;
+}
+
+.img-placeholder.error::after {
+  content: 'broken_image';
+  font-family: 'Material Symbols Outlined';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 32px;
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+/* Prose images (markdown content) — CSS spinner fallback via ::before */
+.prose .img-placeholder {
+  display: inline-block;
+  max-width: 100%;
+}
+
+.prose .img-placeholder::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 32px;
+  height: 32px;
+  margin: -16px 0 0 -16px;
+  border: 3px solid var(--md-sys-color-surface-container-highest);
+  border-top-color: var(--md-sys-color-primary);
+  border-radius: 50%;
+  animation: img-spinner 0.8s linear infinite;
+  z-index: 1;
+  transition: opacity 0.3s var(--m3-easing-standard);
+}
+
+.prose .img-placeholder.loaded::before,
+.prose .img-placeholder.error::before {
+  opacity: 0;
+}
+
+@keyframes img-spinner {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* ─── KaTeX ──────────────────────────────────────────────── */

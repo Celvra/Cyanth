@@ -8,6 +8,8 @@ export const zhCN: Record<string, string> = {
   'nav.home': '首页',
   'nav.about': '关于',
   'nav.archive': '归档',
+  'nav.projects': '项目',
+  'nav.devices': '设备',
   'nav.navigation': '导航',
 
   // Top bar
@@ -34,6 +36,14 @@ export const zhCN: Record<string, string> = {
   'home.title': '欢迎来到 #首页',
   'home.github_contributions': 'GitHub 贡献',
   'home.no_posts': '暂无文章。',
+  'home.all': '全部',
+  'home.pinned': '置顶',
+  'home.year_left': '本年还剩',
+  'home.month_left': '本月还剩',
+  'home.week_left': '本周还剩',
+  'home.days': '天',
+  'home.next_holiday': '距离',
+  'home.today': '今天',
 
   // Archive
   'archive.title': '归档',
@@ -48,6 +58,8 @@ export const zhCN: Record<string, string> = {
 
   // Tag
   'tag.title': '标签：',
+  'tag.more': '更多',
+  'tag.less': '收起',
   'tag.posts': '篇文章',
   'tag.empty': '该标签下暂无文章。',
 
@@ -89,4 +101,24 @@ export const zhCN: Record<string, string> = {
 
   // Music
   'music.playlist': '播放列表',
+
+  // Projects
+  'projects.title': '项目',
+  'projects.subtitle': '我做过的和正在做的事情',
+  'projects.empty': '暂无项目。',
+  'projects.status.active': '维护中',
+  'projects.status.wip': '开发中',
+  'projects.status.archived': '已归档',
+
+  // Devices
+  'devices.title': '设备',
+  'devices.subtitle': '博主正在使用的东西',
+  'devices.empty': '暂无设备。',
+  'devices.category.phone': '手机',
+  'devices.category.laptop': '笔记本',
+  'devices.category.desktop': '台式机',
+  'devices.category.tablet': '平板',
+  'devices.category.audio': '音频',
+  'devices.category.peripheral': '外设',
+  'devices.category.other': '其他',
 };

@@ -120,11 +120,12 @@ export default class CategoryComponent implements OnInit {
 
   ngOnInit(): void {
     const segments = window.location.pathname.split('/').filter(Boolean);
-    this.categoryName = segments[segments.length - 1] ?? '';
+    this.categoryName = decodeURIComponent(segments[segments.length - 1] ?? '');
 
     this.posts = this.contentFiles
+      .filter(f => f.filename.includes('/articles/'))
       .map(f => ({
-        slug: f.slug || (f.filename.replace(/\.md$/, '').split('/').pop() ?? ''),
+        slug: (f.slug || (f.filename.replace(/\.md$/, '').split('/').pop() ?? '')).replace(/\s+/g, '-').toLowerCase(),
         frontmatter: f.attributes,
       }))
       .filter(p => !p.frontmatter.draft && p.frontmatter.category === this.categoryName)

@@ -38,7 +38,10 @@
   <div class="main-area">
     <app-top-bar (menuClick)="toggleMobileMenu()" (memberClick)="toggleMemberMenu()" />
     <main class="content-scroll" id="main-scroll-container">
-      <router-outlet />
+      <div class="content-wrapper">
+        <router-outlet />
+      </div>
+      <app-footer />
     </main>
   </div>
 

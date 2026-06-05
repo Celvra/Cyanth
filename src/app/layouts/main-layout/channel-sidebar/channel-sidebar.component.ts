@@ -5,6 +5,7 @@
 //
 import {
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   Output,
   EventEmitter,
@@ -12,10 +13,17 @@ import {
   inject,
   HostListener,
   Renderer2,
+  ViewChild,
+  DestroyRef,
+  PLATFORM_ID,
 } from '@angular/core';
+import type { ElementRef, AfterViewInit } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { blogConfig } from '../../../core/config';
 import { ThemeService } from '../../../core/services/theme.service';
+import { TypewriterService } from '../../../core/services/typewriter.service';
 import type { Locale } from '../../../core/services/i18n.service';
 import { I18nService } from '../../../core/services/i18n.service';
 import { TranslatePipe } from '../../../shared/pipes/translate.pipe';
@@ -24,12 +32,26 @@ import { TranslatePipe } from '../../../shared/pipes/translate.pipe';
   selector: 'app-channel-sidebar',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterLink, RouterLinkActive, TranslatePipe],
+  imports: [RouterLink, RouterLinkActive, TranslatePipe, MatProgressSpinner],
   template: `
     <!-- Banner -->
-    <div class="sidebar-banner">
+    <div
+      class="sidebar-banner"
+      [class.banner-image]="config.banner.mode === 'image'"
+      [class.banner-loaded]="bannerLoaded()"
+      [style.background-image]="bannerLoaded() ? bannerBg() : 'none'"
+      [style.background-position]="config.banner.mode === 'image' ? config.banner.imagePosition : null"
+    >
+      @if (config.banner.mode === 'image' && !bannerLoaded()) {
+        <div class="banner-spinner-wrap">
+          <mat-spinner diameter="28" />
+        </div>
+      }
       <div class="banner-overlay">
         <span class="banner-title">{{ config.site.title }}</span>
+        <div class="banner-subtitle" #subtitleEl [class.visible]="!!typewriter.displayHtml()">
+          <div class="subtitle-inner" [innerHTML]="typewriter.displayHtml()"></div>
+        </div>
       </div>
     </div>
 
@@ -103,10 +125,30 @@ import { TranslatePipe } from '../../../shared/pipes/translate.pipe';
         var(--md-sys-color-primary-container),
         var(--md-sys-color-tertiary-container)
       );
+      background-size: cover;
+      background-repeat: no-repeat;
       flex-shrink: 0;
       position: relative;
       border-radius: 0 var(--md-sys-shape-corner-large) 0 0;
       transition: background-color 0.8s var(--m3-easing-standard);
+    }
+
+    .sidebar-banner.banner-image {
+      background-color: var(--md-sys-color-surface-container);
+      opacity: 0;
+      transition: opacity 0.4s var(--m3-easing-standard);
+    }
+
+    .sidebar-banner.banner-image.banner-loaded {
+      opacity: 1;
+    }
+
+    .banner-spinner-wrap {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 1;
     }
 
     .banner-overlay {
@@ -118,10 +160,47 @@ import { TranslatePipe } from '../../../shared/pipes/translate.pipe';
       background: linear-gradient(transparent, rgba(0, 0, 0, 0.4));
     }
 
+    .banner-image .banner-overlay {
+      background: linear-gradient(transparent, rgba(0, 0, 0, 0.6));
+    }
+
     .banner-title {
       font-size: 16px;
       font-weight: 600;
       color: var(--md-sys-color-on-surface);
+    }
+
+    .banner-subtitle {
+      font-size: 12px;
+      line-height: 1.5;
+      color: var(--md-sys-color-on-surface-variant);
+      height: 0;
+      opacity: 0;
+      margin-top: 0;
+      pointer-events: none;
+      word-break: break-word;
+      transition:
+        height 0.3s var(--m3-easing-standard),
+        opacity 0.3s var(--m3-easing-standard),
+        margin-top 0.3s var(--m3-easing-standard);
+    }
+
+    .banner-subtitle.visible {
+      opacity: 1;
+      margin-top: 4px;
+      pointer-events: auto;
+    }
+
+    .typewriter-cursor {
+      animation: blink 0.8s step-end infinite;
+      color: var(--md-sys-color-primary);
+      font-weight: 300;
+    }
+
+    @keyframes blink {
+      50% {
+        opacity: 0;
+      }
     }
 
     .sidebar-content {
@@ -299,17 +378,77 @@ import { TranslatePipe } from '../../../shared/pipes/translate.pipe';
     }
   `,
 })
-export class ChannelSidebarComponent {
+export class ChannelSidebarComponent implements AfterViewInit {
   @Output() navigate = new EventEmitter<void>();
+  @ViewChild('subtitleEl') subtitleEl!: ElementRef<HTMLElement>;
 
   config = blogConfig;
+  bannerBg = (): string | null => {
+    if (this.config.banner.mode === 'image' && this.config.banner.image) {
+      return `url(${this.config.banner.image})`;
+    }
+    return null;
+  };
+  bannerLoaded = signal(false);
   infoExpanded = signal(true);
   langMenuOpen = signal(false);
   langMenuPos = signal({ x: 0, y: 0 });
   i18n = inject(I18nService);
   private renderer = inject(Renderer2);
+  private cdr = inject(ChangeDetectorRef);
+  private destroyRef = inject(DestroyRef);
+  private isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
   private langMenuEl: HTMLElement | null = null;
   themeService = inject(ThemeService);
+  typewriter = inject(TypewriterService);
+
+  constructor() {
+    void this.typewriter.init();
+    if (this.isBrowser && this.config.banner.mode === 'image' && this.config.banner.image) {
+      const img = new Image();
+      img.onload = () => {
+        this.bannerLoaded.set(true);
+        this.cdr.detectChanges();
+      };
+      img.onerror = () => {
+        this.bannerLoaded.set(true); // hide spinner even on error
+        this.cdr.detectChanges();
+      };
+      img.src = this.config.banner.image;
+    } else if (this.config.banner.mode !== 'image') {
+      this.bannerLoaded.set(true);
+    }
+  }
+
+  ngAfterViewInit(): void {
+    if (!this.isBrowser) {
+      return;
+    }
+    const el = this.subtitleEl.nativeElement;
+
+    const updateHeight = (): void => {
+      requestAnimationFrame(() => {
+        const inner = el.querySelector<HTMLElement>('.subtitle-inner');
+        if (!inner) {
+          return;
+        }
+        const h = inner.scrollHeight;
+        if (h > 0) {
+          this.renderer.setStyle(el, 'height', `${h}px`);
+        } else {
+          this.renderer.removeStyle(el, 'height');
+        }
+      });
+    };
+
+    const observer = new MutationObserver(() => {
+      updateHeight();
+      this.cdr.detectChanges();
+    });
+    observer.observe(el, { childList: true, subtree: true, characterData: true });
+
+    this.destroyRef.onDestroy(() => observer.disconnect());
+  }
 
   @HostListener('document:click', ['$event'])
   onDocClick(e: Event): void {

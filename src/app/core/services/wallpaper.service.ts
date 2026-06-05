@@ -50,7 +50,9 @@ export class WallpaperService {
     this.loading.set(true);
 
     try {
-      const res = await fetch(blogConfig.theme.wallpaperApi);
+      const target = blogConfig.theme.wallpaperApi;
+      const fetchUrl = blogConfig.corsProxy ? `${blogConfig.corsProxy}/?url=${encodeURIComponent(target)}` : target;
+      const res = await fetch(fetchUrl);
       if (!res.ok) {
         throw new Error(`HTTP ${res.status}`);
       }

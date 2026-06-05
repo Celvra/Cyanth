@@ -10,6 +10,7 @@ export interface PostFrontmatter {
   tags: string[];
   category?: string;
   draft: boolean;
+  pinned?: boolean;
   cover?: string;
   type: 'post' | 'share';
   appIcon?: string;

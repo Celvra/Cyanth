@@ -123,8 +123,9 @@ export default class TagComponent implements OnInit {
     this.tagName = decodeURIComponent(segments[segments.length - 1] ?? '');
 
     this.posts = this.contentFiles
+      .filter(f => f.filename.includes('/articles/'))
       .map(f => ({
-        slug: f.slug || (f.filename.replace(/\.md$/, '').split('/').pop() ?? ''),
+        slug: (f.slug || (f.filename.replace(/\.md$/, '').split('/').pop() ?? '')).replace(/\s+/g, '-').toLowerCase(),
         frontmatter: f.attributes,
       }))
       .filter(p => !p.frontmatter.draft && p.frontmatter.tags.includes(this.tagName))

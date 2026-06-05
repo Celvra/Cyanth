@@ -149,12 +149,18 @@ export default class ArchiveComponent implements OnInit {
 
   ngOnInit(): void {
     const posts: PostItem[] = this.contentFiles
+      .filter(f => f.filename.includes('/articles/'))
       .map(f => ({
-        slug: f.filename.replace(/\.md$/, '').split('/').pop() ?? '',
+        slug: (f.slug || (f.filename.replace(/\.md$/, '').split('/').pop() ?? '')).replace(/\s+/g, '-').toLowerCase(),
         frontmatter: f.attributes,
       }))
       .filter(p => !p.frontmatter.draft)
-      .sort((a, b) => new Date(b.frontmatter.published).getTime() - new Date(a.frontmatter.published).getTime());
+      .sort((a, b) => {
+        if (a.frontmatter.pinned !== b.frontmatter.pinned) {
+          return a.frontmatter.pinned ? -1 : 1;
+        }
+        return new Date(b.frontmatter.published).getTime() - new Date(a.frontmatter.published).getTime();
+      });
 
     this.totalPosts = posts.length;
 

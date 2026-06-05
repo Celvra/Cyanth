@@ -3,6 +3,9 @@
 // licensed under MIT License
 // https://github.com/Celvra/Cyanth/blob/master/LICENSE
 //
+import { projectsConfig } from './projects.config';
+import { devicesConfig } from './devices.config';
+
 /**
  * 配置文件
  */
@@ -16,6 +19,25 @@ export const blogConfig = {
     siteURL: 'https://x0.fan', // 你的博客链接
     description: '一个使用 Angular 制作的博客',
     favicon: '/avatar.jpg',
+  },
+
+  /* Banner */
+  banner: {
+    mode: 'image' as 'gradient' | 'image', // gradient 使用主题渐变
+    image: 'https://uapis.cn/api/v1/random/image?category=acg&type=pc', // mode 为 image 时填写图片路径
+    imagePosition: 'center' as 'center' | 'top' | 'bottom', // 图片定位
+  },
+
+  /* 打字机 */
+  typewriter: {
+    enabled: true,
+    texts: [],
+    api: 'https://v1.hitokoto.cn/?c=d&c=h&c=i&c=k&encode=text', // 需要返回纯文本的 API
+    apiFetchCount: 3,
+    typingSpeed: 80,
+    deletingSpeed: 40,
+    pauseDuration: 2000,
+    deletePause: 800,
   },
 
   /* 个人信息 */
@@ -49,13 +71,20 @@ export const blogConfig = {
   navChannels: [
     { label: 'nav.home', href: '/', icon: 'home', id: 'home' },
     { label: 'nav.about', href: '/about', icon: 'info', id: 'about' },
+    ...(projectsConfig.enabled
+      ? [{ label: 'nav.projects', href: '/projects', icon: 'deployed_code', id: 'projects' }]
+      : []),
+    ...(devicesConfig.enabled ? [{ label: 'nav.devices', href: '/devices', icon: 'devices', id: 'devices' }] : []),
     { label: 'nav.archive', href: '/archive', icon: 'archive', id: 'archive' },
   ] as Array<{ label: string; href: string; icon: string; id: string }>,
+
+  /* CORS 代理 */
+  corsProxy: 'https://cors.x0.fan', // CORS 代理地址，留空则不使用代理
 
   /* 主题 */
   theme: {
     defaultSeedColor: '#6750A4',
-    wallpaperApi: '/wallpaper-api/api/dongman.php',
+    wallpaperApi: 'https://api.fuchenboke.cn/api/dongman.php',
     backgroundBlur: 16,
     backgroundBrightness: 0.7,
     defaultDarkMode: 'auto' as 'auto' | 'light' | 'dark',
@@ -70,7 +99,7 @@ export const blogConfig = {
   music: {
     enable: true,
     mode: 'meting' as 'local' | 'meting',
-    metingApi: 'https://api.injahow.cn/meting/?server=:server&type=:type&id=:id&auth=:auth&r=:r', // 测试用 API
+    metingApi: 'https://meting.x0.fan/api?server=:server&type=:type&id=:id&auth=:auth&r=:r', // 测试用 API
     metingId: '151094169', // 试试我的神人音乐品味
     metingServer: 'netease',
     metingType: 'playlist',
@@ -102,27 +131,20 @@ export const blogConfig = {
   about: {
     techStack: 'Kotlin, Java, Rust, React, Vue, Angular',
     createdDate: '2026/5/31',
-    markdown: `
-## 关于本站
-
-本站是一个基于 Angular 开发的博客，你可以在 Github 上搜索 "Cyanth" 以找到这个项目喵！
-
-## 关于我
-
-我是一个笨蛋开发者。平时喜欢写写前端，用 AI 制作自己喜欢的项目。<br>
-最喜欢的 UI 样式是 Material Design 3 。<br>
-喜欢可乐和软软的被窝。
-
-
-    `.trim(),
   },
+
+  /* 项目 — 详见 projects.config.ts */
+  projects: projectsConfig,
+
+  /* 设备 — 详见 devices.config.ts */
+  devices: devicesConfig,
 
   /* 评论 */
   comments: {
-    enabled: false,
+    enabled: true,
     provider: 'twikoo' as 'twikoo',
     twikoo: {
-      envId: '', // 输入你的 twikoo 地址
+      envId: 'https://twikoo.x0.fan', // 输入你的 twikoo 地址
       region: '' /* 可选 */,
     },
   },
@@ -133,5 +155,11 @@ export const blogConfig = {
     text: '© 2026 Object2. All rights reserved.',
     license: 'CC BY-NC-SA 4.0',
     licenseUrl: 'https://creativecommons.org/licenses/by-nc-sa/4.0/',
+  },
+
+  /* 页脚  自定义 HTML 请编辑 src/content/footer.html */
+  footer: {
+    enabled: true,
+    text: 'Powered by Cyanth',
   },
 };

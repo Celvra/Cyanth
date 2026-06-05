@@ -4,17 +4,21 @@
 // https://github.com/Celvra/Cyanth/blob/master/LICENSE
 //
 import { Injectable, signal } from '@angular/core';
-import type { Post } from '../models/post.model';
+
+interface SearchablePost {
+  slug: string;
+  frontmatter: { title: string; description?: string; category?: string; tags: string[] };
+}
 
 @Injectable({ providedIn: 'root' })
 export class SearchService {
-  private posts = signal<Post[]>([]);
+  private posts = signal<SearchablePost[]>([]);
   private query = signal('');
 
   readonly allPosts = this.posts.asReadonly();
   readonly searchQuery = this.query.asReadonly();
 
-  setPosts(posts: Post[]): void {
+  setPosts(posts: SearchablePost[]): void {
     this.posts.set(posts);
   }
 
@@ -22,7 +26,7 @@ export class SearchService {
     this.query.set(q);
   }
 
-  get filteredPosts(): Post[] {
+  get filteredPosts(): SearchablePost[] {
     const q = this.query().toLowerCase();
     if (!q) {
       return this.posts();

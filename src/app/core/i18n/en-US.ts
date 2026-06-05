@@ -8,6 +8,8 @@ export const enUS: Record<string, string> = {
   'nav.home': 'Home',
   'nav.about': 'About',
   'nav.archive': 'Archive',
+  'nav.projects': 'Projects',
+  'nav.devices': 'Devices',
   'nav.navigation': 'Navigation',
 
   // Top bar
@@ -34,6 +36,14 @@ export const enUS: Record<string, string> = {
   'home.title': 'Welcome to #Home',
   'home.github_contributions': 'GitHub contributions',
   'home.no_posts': 'No posts yet.',
+  'home.all': 'All',
+  'home.pinned': 'Pinned',
+  'home.year_left': 'Year left',
+  'home.month_left': 'Month left',
+  'home.week_left': 'Week left',
+  'home.days': 'days',
+  'home.next_holiday': 'Next:',
+  'home.today': 'Today',
 
   // Archive
   'archive.title': 'Archive',
@@ -48,6 +58,8 @@ export const enUS: Record<string, string> = {
 
   // Tag
   'tag.title': 'Tag: ',
+  'tag.more': 'More',
+  'tag.less': 'Less',
   'tag.posts': ' posts',
   'tag.empty': 'No posts with this tag.',
 
@@ -89,4 +101,24 @@ export const enUS: Record<string, string> = {
 
   // Music
   'music.playlist': 'Playlist',
+
+  // Projects
+  'projects.title': 'Projects',
+  'projects.subtitle': 'Things I have built and things I am building',
+  'projects.empty': 'No projects yet.',
+  'projects.status.active': 'Active',
+  'projects.status.wip': 'In Progress',
+  'projects.status.archived': 'Archived',
+
+  // Devices
+  'devices.title': 'Devices',
+  'devices.subtitle': 'Things the author uses',
+  'devices.empty': 'No devices yet.',
+  'devices.category.phone': 'Phone',
+  'devices.category.laptop': 'Laptop',
+  'devices.category.desktop': 'Desktop',
+  'devices.category.tablet': 'Tablet',
+  'devices.category.audio': 'Audio',
+  'devices.category.peripheral': 'Peripheral',
+  'devices.category.other': 'Other',
 };

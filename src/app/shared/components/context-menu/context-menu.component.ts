@@ -118,7 +118,7 @@ export class ContextMenuComponent {
       return;
     }
 
-    if ('ontouchstart' in window && !('pointerType' in event)) {
+    if (window.matchMedia('(max-width: 767px)').matches || ('ontouchstart' in window && !('pointerType' in event))) {
       return;
     }
 

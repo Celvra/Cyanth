@@ -10,6 +10,7 @@ import { ChannelSidebarComponent } from './channel-sidebar/channel-sidebar.compo
 import { TopBarComponent } from './top-bar/top-bar.component';
 import { MemberSidebarComponent } from './member-sidebar/member-sidebar.component';
 import { MusicPlayerComponent } from '../../shared/components/music-player/music-player.component';
+import { FooterComponent } from '../../shared/components/footer/footer.component';
 import { blogConfig } from '../../core/config';
 
 @Component({
@@ -25,6 +26,7 @@ import { blogConfig } from '../../core/config';
     TopBarComponent,
     MemberSidebarComponent,
     MusicPlayerComponent,
+    FooterComponent,
   ],
   templateUrl: './main-layout.component.html',
   styleUrl: './main-layout.component.scss',

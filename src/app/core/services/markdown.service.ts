@@ -27,6 +27,15 @@ export class MarkdownService {
       }),
       gfmHeadingId(),
     );
+
+    this.marked.use({
+      renderer: {
+        image({ href, title, text }) {
+          const t = title ? ` title="${title}"` : '';
+          return `<span class="img-placeholder"><img src="${href}" alt="${text}"${t} loading="lazy" onload="this.parentElement.classList.add('loaded')" onerror="this.parentElement.classList.add('error')"/></span>`;
+        },
+      },
+    });
   }
 
   render(markdown: string): string {

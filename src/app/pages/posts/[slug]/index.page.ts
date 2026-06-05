@@ -7,6 +7,7 @@ import type { OnInit, OnDestroy } from '@angular/core';
 import { Component, ChangeDetectionStrategy, signal, computed, effect, inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { injectContent, injectContentFiles, MarkdownComponent } from '@analogjs/content';
 import type { PostFrontmatter } from '../../../core/models/post.model';
@@ -29,7 +30,7 @@ interface ContentPost {
   selector: 'app-post',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [MarkdownComponent, RouterLink, TranslatePipe, MusicPlayerComponent, CommentsComponent],
+  imports: [MarkdownComponent, RouterLink, TranslatePipe, MatProgressSpinner, MusicPlayerComponent, CommentsComponent],
   template: `
     @if (post(); as p) {
       <div class="reading-progress" [style.width.%]="readingProgress()"></div>
@@ -62,7 +63,18 @@ interface ContentPost {
             }
 
             @if (p.frontmatter.cover) {
-              <img [src]="p.frontmatter.cover" alt="" class="post-cover" />
+              <div class="post-cover-wrap img-placeholder">
+                <div class="img-spinner-wrap">
+                  <mat-spinner diameter="36" />
+                </div>
+                <img
+                  [src]="p.frontmatter.cover"
+                  alt=""
+                  class="post-cover"
+                  (load)="onImgLoad($event)"
+                  (error)="onImgError($event)"
+                />
+              </div>
             }
 
             <div class="prose" id="post-content">
@@ -319,12 +331,16 @@ interface ContentPost {
       border-bottom: 1px solid var(--md-sys-color-outline-variant);
     }
 
-    .post-cover {
-      width: 100%;
-      max-height: 400px;
-      object-fit: cover;
+    .post-cover-wrap {
       border-radius: var(--md-sys-shape-corner-medium);
       margin-bottom: 24px;
+      aspect-ratio: 16 / 9;
+    }
+
+    .post-cover {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
 
     .post-footer {
@@ -775,10 +791,11 @@ export default class PostComponent implements OnInit, OnDestroy {
   private _contentFile = toSignal(injectContent<PostFrontmatter>({ param: 'slug', subdirectory: 'articles' }));
 
   private _allPosts = injectContentFiles<PostFrontmatter>()
+    .filter(f => f.filename.includes('/articles/'))
     .map(
       f =>
         ({
-          slug: f.slug || (f.filename.replace(/\.md$/, '').split('/').pop() ?? ''),
+          slug: (f.slug || (f.filename.replace(/\.md$/, '').split('/').pop() ?? '')).replace(/\s+/g, '-').toLowerCase(),
           frontmatter: f.attributes,
           content: f.content ?? '',
         }) as ContentPost,
@@ -958,9 +975,8 @@ export default class PostComponent implements OnInit, OnDestroy {
     }
 
     const lastH = h[h.length - 1];
-    if (c.scrollTop + c.clientHeight >= c.scrollHeight - 100 && lastH) {
+    if (c.scrollTop + c.clientHeight >= c.scrollHeight - 100 && lastH && this.toc.activeHeading() !== lastH.slug) {
       this.toc.activeHeading.set(lastH.slug);
-      this.scrollTocToActive();
     }
   };
 
@@ -1156,5 +1172,15 @@ export default class PostComponent implements OnInit, OnDestroy {
         this.lightbox.open(el.src);
       });
     });
+  }
+
+  onImgLoad(event: Event): void {
+    const el = event.target as HTMLImageElement;
+    el.parentElement?.classList.add('loaded');
+  }
+
+  onImgError(event: Event): void {
+    const el = event.target as HTMLImageElement;
+    el.parentElement?.classList.add('error');
   }
 }

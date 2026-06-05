@@ -7,6 +7,7 @@ import { Component, ChangeDetectionStrategy, inject, computed } from '@angular/c
 import { blogConfig } from '../../core/config';
 import { TranslatePipe } from '../../shared/pipes/translate.pipe';
 import { MarkdownService } from '../../core/services/markdown.service';
+import aboutContent from '../../../content/about/about.md?raw';
 
 @Component({
   selector: 'app-about',
@@ -72,7 +73,7 @@ import { MarkdownService } from '../../core/services/markdown.service';
         </div>
       }
 
-      @if (config.about.markdown) {
+      @if (aboutContent) {
         <div class="markdown-section">
           <div class="markdown-content" [innerHTML]="renderedMarkdown()"></div>
         </div>
@@ -324,7 +325,8 @@ export default class AboutComponent {
   config = blogConfig;
   private md = inject(MarkdownService);
 
-  renderedMarkdown = computed(() => this.md.render(this.config.about.markdown || ''));
+  aboutContent = aboutContent;
+  renderedMarkdown = computed(() => this.md.render(aboutContent));
 
   onAvatarError(event: Event): void {
     const img = event.target as HTMLImageElement;
