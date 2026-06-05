@@ -409,7 +409,7 @@ export class MemberSidebarComponent implements OnInit, OnDestroy {
     }
     const top = el.getBoundingClientRect().top - c.getBoundingClientRect().top + c.scrollTop - 80;
     c.scrollTo({ top, behavior: 'smooth' });
-    history.replaceState(null, '', `#${slug}`);
+    history.replaceState(null, '', `${window.location.pathname}#${slug}`);
   }
 
   scrollToComments(): void {
@@ -420,7 +420,7 @@ export class MemberSidebarComponent implements OnInit, OnDestroy {
     }
     const top = el.getBoundingClientRect().top - c.getBoundingClientRect().top + c.scrollTop - 80;
     c.scrollTo({ top, behavior: 'smooth' });
-    history.replaceState(null, '', '#comments');
+    history.replaceState(null, '', `${window.location.pathname}#comments`);
   }
 
   scrollToTop(): void {
