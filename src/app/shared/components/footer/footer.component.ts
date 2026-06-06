@@ -46,15 +46,6 @@ import footerHtml from '../../../../content/footer.html?raw';
     .footer-custom {
       opacity: 0.7;
     }
-
-    .footer-custom :deep(a) {
-      color: var(--md-sys-color-outline);
-      text-decoration: none;
-    }
-
-    .footer-custom :deep(a:hover) {
-      color: var(--md-sys-color-on-surface-variant);
-    }
   `,
 })
 export class FooterComponent {

@@ -515,6 +515,22 @@ select {
   animation: spin 1.4s linear infinite;
 }
 
+/* ─── Footer ──────────────────────────────────────────── */
+.footer-custom a {
+  color: var(--md-sys-color-primary) !important;
+  text-decoration: none !important;
+}
+.footer-custom a:hover {
+  color: var(--md-sys-color-on-surface-variant) !important;
+  text-decoration: none !important;
+}
+.footer-custom a:visited,
+.footer-custom a:active,
+.footer-custom a:focus {
+  color: var(--md-sys-color-primary) !important;
+  text-decoration: none !important;
+}
+
 /* ─── Image Placeholder — M3 Circular Progress ─────────── */
 .img-placeholder {
   position: relative;

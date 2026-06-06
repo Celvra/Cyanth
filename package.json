@@ -17,8 +17,7 @@
     "lint:fix": "eslint . --fix",
     "format": "prettier --write \"src/**/*.{ts,html,scss,css,json}\"",
     "format:check": "prettier --check \"src/**/*.{ts,html,scss,css,json}\"",
-    "deploy": "pnpm build && cp -r functions dist/analog/public && wrangler pages deploy dist/analog/public --project-name cyanth --branch main",
-    "postbuild": "node scripts/generate-feed.cjs"
+    "deploy": "pnpm build && cp -r functions dist/analog/public && wrangler pages deploy dist/analog/public --project-name cyanth --branch main"
   },
   "private": true,
   "dependencies": {
