@@ -49,7 +49,6 @@ export class MarkdownService {
     const getBool = (key: string): boolean => (typeof data[key] === 'boolean' ? data[key] : false);
     const getArr = (key: string): string[] => (Array.isArray(data[key]) ? (data[key] as string[]) : []);
     const getOpt = (key: string): string | undefined => (typeof data[key] === 'string' ? data[key] : undefined);
-    const rawType = getString('type');
     return {
       title: getString('title') || 'Untitled',
       published: getString('published') || new Date().toISOString(),
@@ -58,7 +57,6 @@ export class MarkdownService {
       category: getString('category'),
       draft: getBool('draft'),
       cover: getOpt('cover'),
-      type: rawType === 'share' ? 'share' : 'post',
       appIcon: getOpt('appIcon'),
       screenshots: getArr('screenshots'),
       platforms: getArr('platforms'),

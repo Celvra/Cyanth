@@ -12,7 +12,6 @@ export interface PostFrontmatter {
   draft: boolean;
   pinned?: boolean;
   cover?: string;
-  type: 'post' | 'share';
   appIcon?: string;
   screenshots?: string[];
   platforms?: string[];

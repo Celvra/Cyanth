@@ -51,5 +51,6 @@ ${items.map((i) => `    <item>
   </channel>
 </rss>`;
 
+fs.mkdirSync(path.dirname(outPath), { recursive: true });
 fs.writeFileSync(outPath, xml);
 console.log('feed.xml generated');
