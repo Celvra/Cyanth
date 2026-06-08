@@ -65,11 +65,11 @@
     "eslint-config-prettier": "^10.1.8",
     "jsdom": "^22.0.0",
     "prettier": "^3.8.3",
-    "typescript": "~5.8.0",
+    "typescript": "~6.0.3",
     "typescript-eslint": "^8.60.0",
-    "vite": "^6.0.0",
-    "vite-tsconfig-paths": "^4.2.0",
-    "vitest": "^3.0.0"
+    "vite": "^8.0.16",
+    "vite-tsconfig-paths": "^6.1.1",
+    "vitest": "^4.1.8"
   },
   "packageManager": "pnpm@9.14.4"
 }
